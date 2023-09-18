@@ -27,6 +27,30 @@ app.get('/api/products/:productID', (req, res)=>{
     res.json(singleProduct)
 })
 
+app.get('/api/vi/query', (req, res) => {
+
+    const { search, limit } = req.query;
+    let sortedProducts = [...products];
+
+    if(search) {
+        sortedProducts = sortedProducts.filter((product) =>{
+            return product.name.startsWith(search);
+        })
+    }
+
+    if(limit) {
+        sortedProducts = sortedProducts.slice(0, Number(limit))
+    }
+
+    if(sortedProducts.length < 1) {
+        //res.status(200).send('No Products Matched');
+        return res.status(200).json({ success: true, data: []})
+    }
+
+    res.status(200).json(sortedProducts);
+
+})
+
 app.listen(8000, ()=>{
     console.log('Server is running on Port 8000....');
 })
