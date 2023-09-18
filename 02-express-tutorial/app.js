@@ -1,17 +1,19 @@
 const express = require('express');
-
 const app = express();
+const people = require('./routes/people');
+const auth = require('./routes/auth');
 
-const logger = require('./logger.js');
+app.use('/api/people', people)
+app.use('/login', auth)
 
-app.use(logger);
+//static assets
+app.use(express.static('./methods-public'));
 
-//req => middleware => res
+//parse from data
+app.use(express.urlencoded({extended: false}));
 
-app.get('/', (req, res)=>{
-    res.send('Home')
-})
-
+//parse json
+app.use(express.json());
 
 app.listen(8000, ()=>{
     console.log('Server is running on Port 8000....');
